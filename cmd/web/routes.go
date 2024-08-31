@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -11,5 +12,5 @@ func initializeRoutes(router *httprouter.Router) {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	http.ServeFile(w, r, "./ui/html/pages/index.html")
+	fmt.Fprint(w, "Welcome to the home page!")
 }
