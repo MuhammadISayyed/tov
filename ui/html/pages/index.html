@@ -6,6 +6,12 @@
     <title>Home page</title>
   </head>
   <body>
-    <p>Hello, World!</p>
+    {{range .Guides}}
+    <article>
+      <h2>{{.Title}}</h2>
+      <time datetime="{{.CreatedAt}}">{{.CreatedAt}}</time>
+      <div>{{.Content}}</div>
+    </article>
+    {{end}}
   </body>
 </html>

@@ -4,8 +4,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func initializeRoutes() *httprouter.Router {
+func (app *app) initializeRoutes() *httprouter.Router {
 	router := httprouter.New()
-	router.GET("/", homeHandler)
+	router.GET("/", app.homeHandler)
 	return router
 }
