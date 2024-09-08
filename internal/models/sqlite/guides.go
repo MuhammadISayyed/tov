@@ -10,6 +10,13 @@ type GuideModel struct {
 	DB *sql.DB
 }
 
+func (m *GuideModel) Insert(title, content string) error {
+	stmt := `INSERT INTO guides (title, content, createdAt)
+	VALUES (?, ?, datetime('now'))`
+	_, err := m.DB.Exec(stmt, title, content)
+	return err
+}
+
 func (m *GuideModel) All() ([]models.Guide, error) {
 	stmt := `SELECT id, title, content, createdAt FROM guides ORDER BY id DESC`
 	rows, err := m.DB.Query(stmt)
