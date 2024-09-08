@@ -10,5 +10,6 @@ func (app *app) initializeRoutes() *httprouter.Router {
 	router.GET("/guides/create", app.createGuide)
 	router.POST("/guides/create", app.storeGuide)
 	router.GET("/signup", app.signupHandler)
+	router.POST("/signup", app.storeSignup)
 	return router
 }

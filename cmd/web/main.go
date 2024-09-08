@@ -11,6 +11,8 @@ import (
 
 type app struct {
 	guides *sqlite.GuideModel
+	users *sqlite.UserModel
+
 }
 
 func main() {
@@ -22,6 +24,9 @@ func main() {
 
 	app := app{
 		guides: &sqlite.GuideModel{
+			DB: db,
+		},
+		users: &sqlite.UserModel{
 			DB: db,
 		},
 	}

@@ -7,6 +7,26 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func (app *app) storeSignup(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	err = app.users.Insert(
+		r.PostForm.Get("name"),
+		r.PostForm.Get("email"),
+		r.PostForm.Get("password"),
+	)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return 
+	}
+
+	http.Redirect(w, r, "/login", http.StatusFound)
+}
+
 func (app *app) storeGuide(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := r.ParseForm()
 	if err != nil {
