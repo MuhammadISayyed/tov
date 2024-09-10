@@ -6,13 +6,14 @@ import (
 	"net/http"
 
 	"github.com/MuhammadISayyed/tov.git/internal/models/sqlite"
+	"github.com/gorilla/sessions"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type app struct {
 	guides *sqlite.GuideModel
 	users *sqlite.UserModel
-
+	session *sessions.CookieStore
 }
 
 func main() {
@@ -22,6 +23,10 @@ func main() {
     }
 	log.Println(db)
 
+	session := sessions.NewCookieStore([]byte("6qIR6SJWVcBYukoqFgNztDeEmu1nwbYt"))
+	session.Options.HttpOnly = true
+	session.Options.SameSite = http.SameSiteLaxMode
+
 	app := app{
 		guides: &sqlite.GuideModel{
 			DB: db,
@@ -29,6 +34,7 @@ func main() {
 		users: &sqlite.UserModel{
 			DB: db,
 		},
+		session: session,
 	}
 
 	router := app.initializeRoutes()

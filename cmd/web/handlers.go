@@ -7,6 +7,49 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func (app *app) storeLogout(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	session, _ := app.session.Get(r, "tov")
+	delete(session.Values, "userId")
+	err := session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) storeLogin(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	id, err := app.users.Authenticate(
+		r.PostForm.Get("email"),
+		r.PostForm.Get("password"),
+	)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	session, _ := app.session.Get(r, "tov")
+	session.Values["userId"] = id
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func (app *app) loginHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	http.ServeFile(w, r, "./ui/html/pages/login.html")
+}
+
 func (app *app) storeSignup(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := r.ParseForm()
 	if err != nil {
