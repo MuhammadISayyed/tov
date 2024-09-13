@@ -13,7 +13,7 @@ func (app *app) storeLogout(w http.ResponseWriter, r *http.Request, _ httprouter
 	err := session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return 
 	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
@@ -70,6 +70,10 @@ func (app *app) storeSignup(w http.ResponseWriter, r *http.Request, _ httprouter
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
+func (app *app) signupHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	http.ServeFile(w, r, "./ui/html/pages/signup.html")	
+}
+
 func (app *app) storeGuide(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := r.ParseForm()
 	if err != nil {
@@ -112,8 +116,4 @@ func (app *app) homeHandler(w http.ResponseWriter, r *http.Request, _ httprouter
 		return
 	}
 	t.Execute(w, map[string]any{"Guides": guides})
-}
-
-func (app *app) signupHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	http.ServeFile(w, r, "./ui/html/pages/signup.html")	
 }
